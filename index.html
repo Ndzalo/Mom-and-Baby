@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mom & Baby Health Information</title>
+    <style>
+        :root {
+            --primary-color: #ff8fb1;
+            --secondary-color: #98d7c2;
+            --light-bg: #f9f7f7;
+            --dark-text: #333333;
+            --light-text: #ffffff;
+            --shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tab {
+            padding: 12px 20px;
+            background-color: #e0e0e0;
+            border: none;
+            cursor: pointer;
+            flex: 1;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+        }
+
+        .content {
+            display: none;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+
+        .summary {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+            display: none;
+        }
+
+        .summary h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .summary-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .summary-label {
+            font-weight: bold;
+            width: 40%;
+        }
+
+        .summary-value {
+            width: 60%;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 20px 0;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .print-btn {
+            background-color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .summary-item {
+                flex-direction: column;
+            }
+
+            .summary-label, .summary-value {
+                width: 100%;
+            }
+        }
+
+        .health-content {
+            margin-top: 20px;
+        }
+
+        .health-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .health-card-header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .health-card-content {
+            padding: 20px;
+        }
+
+        .health-card.baby .health-card-header {
+            background-color: var(--secondary-color);
+        }
+
+        .health-card.mom .health-card-header {
+            background-color: var(--primary-color);
+        }
+
+        .milestone-list, .tip-list {
+            list-style-type: none;
+        }
+
+        .milestone-list li, .tip-list li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .milestone-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .tip-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .alert {
+            background-color: #ffecb3;
+            border-left: 4px solid #ffb300;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #b37400;
+        }
+
+        .resource-list {
+            list-style-type: none;
+        }
+
+        .resource-list li {
+            margin-bottom: 15px;
+        }
+
+        .resource-title {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .resource-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .resource-link {
+            color: #4a6ee0;
+            text-decoration: none;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Mom & Baby Health Information</h1>
+            <p>Record important information about mom and baby in one place</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="mom-info">Mom Information</button>
+            <button class="tab" data-tab="baby-info">Baby Information</button>
+            <button class="tab" data-tab="health-info">Health Info</button>
+            <button class="tab" data-tab="vaccination">Vaccination</button>
+            <button class="tab" data-tab="family-planning">Family Planning</button>
+            <button class="tab" data-tab="growth-tracker">Growth Tracker</button>
+            <button class="tab" data-tab="feeding-nutrition">Feeding & Nutrition</button>
+            <button class="tab" data-tab="emergency-preparedness">Emergency Preparedness</button>
+            <button class="tab" data-tab="milestone-tracker">Milestone Tracker</button>
+            <button class="tab" data-tab="postpartum-mental-health">Postpartum Mental Health</button>
+            <button class="tab" data-tab="community-support">Community Support</button>
+        </div>
+
+        <!-- Mom Information Tab -->
+        <div id="mom-info" class="content active">
+            <h2>Mother's Information</h2>
+            <form id="mom-form">
+                <div class="form-group">
+                    <label for="mom-name">Full Name:</label>
+                    <input type="text" id="mom-name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mom-dob">Date of Birth:</label>
+                    <input type="date" id="mom-dob" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mom-blood">Blood Type:</label>
+                    <select id="mom-blood" required>
+                        <option value="">Select blood type</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="Unknown">Unknown</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mom-allergies">Allergies:</label>
+                    <textarea id="mom-allergies" rows="3" placeholder="List any allergies or write 'None'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="mom-conditions">Medical Conditions:</label>
+                    <textarea id="mom-conditions" rows="3" placeholder="List any medical conditions or write 'None'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="mom-medications">Current Medications:</label>
+                    <textarea id="mom-medications" rows="3" placeholder="List any medications or write 'None'"></textarea>
+                </div>
+
+                <div class="actions">
+                    <button type="button" class="btn" id="save-mom">Save & Continue</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Baby Information Tab -->
+        <div id="baby-info" class="content">
+            <h2>Baby's Information</h2>
+            <form id="baby-form">
+                <div class="form-group">
+                    <label for="baby-name">Full Name:</label>
+                    <input type="text" id="baby-name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="baby-dob">Date of Birth:</label>
+                    <input type="date" id="baby-dob" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="baby-time">Time of Birth:</label>
+                    <input type="time" id="baby-time">
+                </div>
+
+                <div class="form-group">
+                    <label for="baby-gender">Gender:</label>
+                    <select id="baby-gender" required>
+                        <option value="">Select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="baby-weight">Birth Weight (g):</label>
+                    <input type="number" id="baby-weight" placeholder="e.g., 3500">
+                </div>
+
+                <div class="form-group">
+                    <label for="baby-length">Birth Length (cm):</label>
+                    <input type="number" id="baby-length" placeholder="e.g., 50">
+                </div>
+
+                <div class="form-group">
+                    <label for="baby-blood">Blood Type:</label>
+                    <select id="baby-blood">
+                        <option value="">Select blood type</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="Unknown">Unknown</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="baby-notes">Special Notes:</label>
+                    <textarea id="baby-notes" rows="3" placeholder="Any special notes about the baby"></textarea>
+                </div>
+
+                <div class="actions">
+                    <button type="button" class="btn" id="back-to-mom">Back</button>
+                    <button type="button" class="btn btn-secondary" id="generate-summary">Generate Summary</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Health Information Tab -->
+        <div id="health-info" class="content">
+            <h2>Health Information</h2>
+
+            <div class="age-selection">
+                <label for="baby-age">Select Your Baby's Age:</label>
+                <select id="baby-age">
+                    <option value="">-- Please select --</option>
+                    <option value="newborn">Newborn (0-1 month)</option>
+                    <option value="1-3months">1-3 months</option>
+                    <option value="4-6months">4-6 months</option>
+                    <option value="7-9months">7-9 months</option>
+                    <option value="10-12months">10-12 months</option>
+                    <option value="toddler">Toddler (1-3 years)</option>
+                </select>
+            </div>
+
+            <div class="health-content" id="health-content">
+                <div class="alert">
+                    <div class="alert-title">Please Select an Age</div>
+                    <p>Select your baby's age above to see personalized health information and care tips.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vaccination Tab -->
+        <div id="vaccination" class="content">
+            <h2>Vaccination Information</h2>
+
+            <div class="health-card">
+                <div class="health-card-header">Vaccination Schedule</div>
+                <div class="health-card-content">
+                    <h3>Recommended Vaccines by Age</h3>
+                    <ul class="milestone-list">
+                        <li><strong>Birth:</strong> Hepatitis B (1st dose)</li>
+                        <li><strong>1-2 months:</strong> Hepatitis B (2nd dose), DTaP, Hib, Polio, PCV, Rotavirus</li>
+                        <li><strong>4 months:</strong> DTaP, Hib, Polio, PCV, Rotavirus</li>
+                        <li><strong>6 months:</strong> DTaP, Hib, PCV, Rotavirus, Influenza (yearly)</li>
+                        <li><strong>12-15 months:</strong> MMR, Varicella, Hib, PCV, Hepatitis A</li>
+                        <li><strong>18 months:</strong> DTaP, Hepatitis A</li>
+                        <li><strong>4-6 years:</strong> DTaP, MMR, Varicella, Polio</li>
+                    </ul>
+
+                    <h3>Tips for Vaccinations</h3>
+                    <ul class="tip-list">
+                        <li>Keep a record of all vaccinations.</li>
+                        <li>Schedule appointments in advance.</li>
+                        <li>Comfort your baby during and after vaccinations.</li>
+                        <li>Monitor for any side effects and consult your pediatrician if needed.</li>
+                    </ul>
+
+                    <h3>Resources</h3>
+                    <ul class="resource-list">
+                        <li>
+                            <span class="resource-title">CDC Vaccination Schedule</span>
+                            <a href="https://www.cdc.gov/vaccines/schedules/index.html" target="_blank" class="resource-link">Visit Website</a>
+                        </li>
+                        <li>
+                            <span class="resource-title">World Health Organization (WHO) Vaccination Resources</span>
+                            <a href="https://www.who.int/health-topics/vaccines-and-immunization" target="_blank" class="resource-link">Visit Website</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Family Planning Tab -->
+        <div id="family-planning" class="content">
+            <h2>Family Planning</h2>
+
+            <div class="health-card">
+                <div class="health-card-header">Postpartum Family Planning</div>
+                <div class="health-card-content">
+                    <h3>Options for Family Planning</h3>
+                    <ul class="milestone-list">
+                        <li><strong>Birth Control Pills:</strong> Hormonal pills to prevent pregnancy.</li>
+                        <li><strong>IUD (Intrauterine Device):</strong> Long-term, reversible contraception.</li>
+                        <li><strong>Condoms:</strong> Barrier method to prevent pregnancy and STIs.</li>
+                        <li><strong>Implants:</strong> Small rods inserted under the skin for long-term contraception.</li>
+                        <li><strong>Natural Methods:</strong> Tracking ovulation and fertility awareness.</li>
+                    </ul>
+
+                    <h3>Tips for Family Planning</h3>
+                    <ul class="tip-list">
+                        <li>Discuss options with your healthcare provider.</li>
+                        <li>Consider your long-term family goals.</li>
+                        <li>Choose a method that fits your lifestyle and health needs.</li>
+                        <li>Stay informed about the effectiveness and side effects of each method.</li>
+                    </ul>
+
+                    <h3>Resources</h3>
+                    <ul class="resource-list">
+                        <li>
+                            <span class="resource-title">Planned Parenthood</span>
+                            <a href="https://www.plannedparenthood.org/" target="_blank" class="resource-link">Visit Website</a>
+                        </li>
+                        <li>
+                            <span class="resource-title">CDC Family Planning Resources</span>
+                            <a href="https://www.cdc.gov/reproductivehealth/contraception/index.htm" target="_blank" class="resource-link">Visit Website</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Growth Tracker Tab -->
+        <div id="growth-tracker" class="content">
+            <h2>Growth Tracker</h2>
+
+            <div class="health-card">
+                <div class="health-card-header">Track Your Baby's Growth</div>
+                <div class="health-card-content">
+                    <h3>Growth Percentile Chart</h3>
+                    <p>Enter your baby's measurements to track growth over time.</p>
+
+                    <div class="form-group">
+                        <label for="baby-weight-tracker">Weight (kg):</label>
+                        <input type="number" id="baby-weight-tracker" placeholder="e.g., 3.5">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="baby-length-tracker">Length (cm):</label>
+                        <input type="number" id="baby-length-tracker" placeholder="e.g., 50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="baby-head-tracker">Head Circumference (cm):</label>
+                        <input type="number" id="baby-head-tracker" placeholder="e.g., 35">
+                    </div>
+
+                    <button class="btn" id="save-growth">Save Growth Data</button>
+
+                    <h3>Growth Tips</h3>
+                    <ul class="tip-list">
+                        <li>Ensure your baby is getting proper nutrition.</li>
+                        <li>Monitor growth regularly and consult your pediatrician if concerned.</li>
+                        <li>Encourage physical activity as your baby grows.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feeding & Nutrition Tab -->
+        <div id="feeding-nutrition" class="content">
+            <h2>Feeding & Nutrition</h2>
+
+            <div class="health-card">
+                <div class="health-card-header">Feeding Tracker</div>
+                <div class="health-card-content">
+                    <h3>Log Feedings</h3>
+                    <div class="form-group">
+                        <label for="feeding-time">Time:</label>
+                        <input type="time" id="feeding-time">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feeding-amount">Amount (ml):</label>
+                        <input type="number" id="feeding-amount" placeholder="e.g., 120">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feeding-type">Type:</label>
+                        <select id="feeding-type">
+                            <option value="breastmilk">Breastmilk</option>
+                            <option value="formula">Formula</option>
+                            <option value="solid">Solid Food</option>
+                        </select>
+                    </div>
+
+                    <button class="btn" id="save-feeding">Log Feeding</button>
+
+                    <h3>Nutrition Tips</h3>
+                    <ul class="tip-list">
+                        <li>Breastfeed or provide formula as the primary source of nutrition for the first 6 months.</li>
+                        <li>Introduce solid foods gradually after 6 months.</li>
+                        <li>Offer a variety of foods to ensure balanced nutrition.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Preparedness Tab -->
+        <div id="emergency-preparedness" class="content">
+            <h2>Emergency Preparedness</h2>
+
+            <div class="health-card">
+                <div class="health-card-header">Emergency Contacts</div>
+                <div class="health-card-content">
+                    <h3>Important Contacts</h3>
+                    <ul class="milestone-list">
+                        <li><strong>Pediatrician:</strong> [Insert Contact Info]</li>
+                        <li><strong>Emergency Services:</strong> 911</li>
+                        <li><strong>Poison Control:</strong> 1-800-222-1222</li>
+                        <li><strong>Local Hospital:</strong> [Insert Contact Info]</li>
+                    </ul>
+
+                    <h3>First-Aid Tips</h3>
+                    <ul class="tip-list">
+                        <li><strong>Choking:</strong> Perform back blows and chest thrusts.</li>
+                        <li><strong>Fever:</strong> Use a cool compress and consult your pediatrician if fever persists.</li>
+                        <li><strong>Burns:</strong> Run cool water over the burn and cover with a sterile bandage.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Milestone Tracker Tab -->
+        <div id="milestone-tracker" class="content">
+            <h2>Milestone Tracker</h2>
+
+            <div class="health-card">
+                <div class="health-card-header">Track Your Baby's Milestones</div>
+                <div class="health-card-content">
+                    <h3>Developmental Milestones</h3>
+                    <ul class="milestone-list">
+                        <li><input type="checkbox" id="milestone1"> <label for="milestone1">First Smile</label></li>
+                        <li><input type="checkbox" id="milestone2"> <label for="milestone2">First Steps</label></li>
+                        <li><input type="checkbox" id="milestone3"> <label for="milestone3">First Words</label></li>
+                        <li><input type="checkbox" id="milestone4"> <label for="milestone4">Rolling Over</label></li>
+                        <li><input type="checkbox" id="milestone5"> <label for="milestone5">Crawling</label></li>
+                    </ul>
+
+                    <button class="btn" id="save-milestones">Save Milestones</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Postpartum Mental Health Tab -->
+        <div id="postpartum-mental-health" class="content">
+            <h2>Postpartum Mental Health</h2>
+
+            <div class="health-card">
+                <div class="health-card-header">Mental Health Resources</div>
+                <div class="health-card-content">
+                    <h3>Signs of Postpartum Depression</h3>
+                    <ul class="tip-list">
+                        <li>Persistent sadness or hopelessness.</li>
+                        <li>Loss of interest in activities.</li>
+                        <li>Difficulty bonding with your baby.</li>
+                        <li>Extreme fatigue or insomnia.</li>
+                    </ul>
+
+                    <h3>Resources</h3>
+                    <ul class="resource-list">
+                        <li>
+                            <span class="resource-title">Postpartum Support International</span>
+                            <a href="https://www.postpartum.net/" target="_blank" class="resource-link">Visit Website</a>
+                        </li>
+                        <li>
+                            <span class="resource-title">National Maternal Mental Health Hotline</span>
+                            <a href="tel:1-833-943-5746" class="resource-link">Call 1-833-943-5746</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Support Tab -->
+        <div id="community-support" class="content">
+            <h2>Community Support</h2>
+
+            <div class="health-card">
+                <div class="health-card-header">Parenting Forums & Support Groups</div>
+                <div class="health-card-content">
+                    <h3>Online Communities</h3>
+                    <ul class="resource-list">
+                        <li>
+                            <span class="resource-title">BabyCenter Community</span>
+                            <a href="https://www.babycenter.com/community" target="_blank" class="resource-link">Visit Website</a>
+                        </li>
+                        <li>
+                            <span class="resource-title">Reddit Parenting</span>
+                            <a href="https://www.reddit.com/r/Parenting/" target="_blank" class="resource-link">Visit Website</a>
+                        </li>
+                    </ul>
+
+                    <h3>Local Support Groups</h3>
+                    <ul class="resource-list">
+                        <li>
+                            <span class="resource-title">La Leche League</span>
+                            <a href="https://www.llli.org/" target="_blank" class="resource-link">Visit Website</a>
+                        </li>
+                        <li>
+                            <span class="resource-title">Postpartum Support Groups</span>
+                            <a href="https://www.postpartum.net/" target="_blank" class="resource-link">Visit Website</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div id="summary" class="summary">
+            <h2>Information Summary</h2>
+
+            <h3>Mother's Information</h3>
+            <div class="summary-item">
+                <div class="summary-label">Name:</div>
+                <div class="summary-value" id="summary-mom-name"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Date of Birth:</div>
+                <div class="summary-value" id="summary-mom-dob"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Blood Type:</div>
+                <div class="summary-value" id="summary-mom-blood"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Allergies:</div>
+                <div class="summary-value" id="summary-mom-allergies"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Medical Conditions:</div>
+                <div class="summary-value" id="summary-mom-conditions"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Medications:</div>
+                <div class="summary-value" id="summary-mom-medications"></div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h3>Baby's Information</h3>
+            <div class="summary-item">
+                <div class="summary-label">Name:</div>
+                <div class="summary-value" id="summary-baby-name"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Date of Birth:</div>
+                <div class="summary-value" id="summary-baby-dob"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Time of Birth:</div>
+                <div class="summary-value" id="summary-baby-time"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Gender:</div>
+                <div class="summary-value" id="summary-baby-gender"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Birth Weight:</div>
+                <div class="summary-value" id="summary-baby-weight"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Birth Length:</div>
+                <div class="summary-value" id="summary-baby-length"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Blood Type:</div>
+                <div class="summary-value" id="summary-baby-blood"></div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Special Notes:</div>
+                <div class="summary-value" id="summary-baby-notes"></div>
+            </div>
+
+            <div class="actions" style="margin-top: 20px;">
+                <button class="btn" id="edit-info">Edit Information</button>
+                <button class="btn print-btn" id="print-summary">Print Summary</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Show active content
+                    contents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === tabId) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Navigation and form submission
+            const saveMomBtn = document.getElementById('save-mom');
+            const backToMomBtn = document.getElementById('back-to-mom');
+            const generateSummaryBtn = document.getElementById('generate-summary');
+            const editInfoBtn = document.getElementById('edit-info');
+            const printSummaryBtn = document.getElementById('print-summary');
+
+            saveMomBtn.addEventListener('click', function() {
+                const momForm = document.getElementById('mom-form');
+                if (validateForm('mom-form')) {
+                    // Switch to baby tab
+                    tabs[1].click();
+                }
+            });
+
+            backToMomBtn.addEventListener('click', function() {
+                // Switch to mom tab
+                tabs[0].click();
+            });
+
+            generateSummaryBtn.addEventListener('click', function() {
+                if (validateForm('baby-form')) {
+                    // Populate and show summary
+                    populateSummary();
+                    document.getElementById('summary').style.display = 'block';
+                    // Scroll to summary
+                    document.getElementById('summary').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            editInfoBtn.addEventListener('click', function() {
+                // Hide summary and go back to mom tab
+                document.getElementById('summary').style.display = 'none';
+                tabs[0].click();
+            });
+
+            printSummaryBtn.addEventListener('click', function() {
+                window.print();
+            });
+
+            // Form validation
+            function validateForm(formId) {
+                const form = document.getElementById(formId);
+                const requiredFields = form.querySelectorAll('[required]');
+                let valid = true;
+
+                requiredFields.forEach(field => {
+                    if (!field.value) {
+                        field.style.borderColor = 'red';
+                        valid = false;
+                    } else {
+                        field.style.borderColor = '#ddd';
+                    }
+                });
+
+                return valid;
+            }
+
+            // Populate summary
+            function populateSummary() {
+                // Mom info
+                document.getElementById('summary-mom-name').textContent = document.getElementById('mom-name').value;
+                document.getElementById('summary-mom-dob').textContent = formatDate(document.getElementById('mom-dob').value);
+                document.getElementById('summary-mom-blood').textContent = document.getElementById('mom-blood').value || 'Not specified';
+                document.getElementById('summary-mom-allergies').textContent = document.getElementById('mom-allergies').value || 'None';
+                document.getElementById('summary-mom-conditions').textContent = document.getElementById('mom-conditions').value || 'None';
+                document.getElementById('summary-mom-medications').textContent = document.getElementById('mom-medications').value || 'None';
+
+                // Baby info
+                document.getElementById('summary-baby-name').textContent = document.getElementById('baby-name').value;
+                document.getElementById('summary-baby-dob').textContent = formatDate(document.getElementById('baby-dob').value);
+                document.getElementById('summary-baby-time').textContent = formatTime(document.getElementById('baby-time').value) || 'Not specified';
+                document.getElementById('summary-baby-gender').textContent = document.getElementById('baby-gender').value;
+
+                const weight = document.getElementById('baby-weight').value;
+                document.getElementById('summary-baby-weight').textContent = weight ? `${weight} g (${(weight/1000).toFixed(2)} kg)` : 'Not specified';
+
+                const length = document.getElementById('baby-length').value;
+                document.getElementById('summary-baby-length').textContent = length ? `${length} cm` : 'Not specified';
+
+                document.getElementById('summary-baby-blood').textContent = document.getElementById('baby-blood').value || 'Not specified';
+                document.getElementById('summary-baby-notes').textContent = document.getElementById('baby-notes').value || 'None';
+            }
+
+            // Format date
+            function formatDate(dateString) {
+                if (!dateString) return '';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            }
+
+            // Format time
+            function formatTime(timeString) {
+                if (!timeString) return '';
+                const [hours, minutes] = timeString.split(':');
+                const period = hours >= 12 ? 'PM' : 'AM';
+                const formattedHours = hours % 12 || 12;
+                return `${formattedHours}:${minutes} ${period}`;
+            }
+
+            // Save data to localStorage (optional feature)
+            function saveData() {
+                const momData = {
+                    name: document.getElementById('mom-name').value,
+                    dob: document.getElementById('mom-dob').value,
+                    blood: document.getElementById('mom-blood').value,
+                    allergies: document.getElementById('mom-allergies').value,
+                    conditions: document.getElementById('mom-conditions').value,
+                    medications: document.getElementById('mom-medications').value
+                };
+
+                const babyData = {
+                    name: document.getElementById('baby-name').value,
+                    dob: document.getElementById('baby-dob').value,
+                    time: document.getElementById('baby-time').value,
+                    gender: document.getElementById('baby-gender').value,
+                    weight: document.getElementById('baby-weight').value,
+                    length: document.getElementById('baby-length').value,
+                    blood: document.getElementById('baby-blood').value,
+                    notes: document.getElementById('baby-notes').value
+                };
+
+                localStorage.setItem('momAndBabyApp_mom', JSON.stringify(momData));
+                localStorage.setItem('momAndBabyApp_baby', JSON.stringify(babyData));
+            }
+
+            // Load data from localStorage (optional feature)
+            function loadData() {
+                const momData = JSON.parse(localStorage.getItem('momAndBabyApp_mom'));
+                const babyData = JSON.parse(localStorage.getItem('momAndBabyApp_baby'));
+
+                if (momData) {
+                    document.getElementById('mom-name').value = momData.name || '';
+                    document.getElementById('mom-dob').value = momData.dob || '';
+                    document.getElementById('mom-blood').value = momData.blood || '';
+                    document.getElementById('mom-allergies').value = momData.allergies || '';
+                    document.getElementById('mom-conditions').value = momData.conditions || '';
+                    document.getElementById('mom-medications').value = momData.medications || '';
+                }
+
+                if (babyData) {
+                    document.getElementById('baby-name').value = babyData.name || '';
+                    document.getElementById('baby-dob').value = babyData.dob || '';
+                    document.getElementById('baby-time').value = babyData.time || '';
+                    document.getElementById('baby-gender').value = babyData.gender || '';
+                    document.getElementById('baby-weight').value = babyData.weight || '';
+                    document.getElementById('baby-length').value = babyData.length || '';
+                    document.getElementById('baby-blood').value = babyData.blood || '';
+                    document.getElementById('baby-notes').value = babyData.notes || '';
+                }
+            }
+
+            // Auto-save when generating summary
+            generateSummaryBtn.addEventListener('click', saveData);
+
+            // Load data on page load
+            loadData();
+
+            // Health information functionality
+            const babyAgeSelect = document.getElementById('baby-age');
+            const healthContent = document.getElementById('health-content');
+
+            babyAgeSelect.addEventListener('change', function() {
+                const selectedAge = this.value;
+
+                if (!selectedAge) {
+                    healthContent.innerHTML = `
+                        <div class="alert">
+                            <div class="alert-title">Please Select an Age</div>
+                            <p>Select your baby's age above to see personalized health information and care tips.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Get the appropriate health content based on selected age
+                const content = getHealthContent(selectedAge);
+                healthContent.innerHTML = content;
+            });
+
+            // Health content by age
+            function getHealthContent(age) {
+                const healthContent = {
+                    'newborn': {
+                        baby: {
+                            milestones: [
+                                "Focuses on faces and high-contrast objects",
+                                "Responds to sounds",
+                                "Lifts head briefly during tummy time",
+                                "Reflexes: rooting, sucking, startle (Moro), grasp"
+                            ],
+                            tips: [
+                                "Feed every 2-3 hours (8-12 times per day)",
+                                "Support neck and head when holding",
+                                "Place baby on back for sleeping (safe sleep)",
+                                "Do short tummy time sessions daily when awake",
+                                "Talk, sing, and make eye contact frequently",
+                                "Keep vaccination schedule up to date"
+                            ]
+                        },
+                        mom: {
+                            health: [
+                                "Monitor for postpartum bleeding (lochia)",
+                                "Watch for signs of infection at incision site (if C-section)",
+                                "Monitor for signs of postpartum depression",
+                                "Attend postpartum check-up (usually 6 weeks after birth)"
+                            ],
+                            tips: [
+                                "Rest when baby sleeps",
+                                "Stay hydrated, especially if breastfeeding",
+                                "Accept help from family and friends",
+                                "Use proper breastfeeding techniques to prevent soreness",
+                                "Do gentle postpartum exercises as approved by doctor",
+                                "Join a new parent support group"
+                            ]
+                        }
+                    },
+                    '1-3months': {
+                        baby: {
+                            milestones: [
+                                "Smiles in response to your voice or face",
+                                "Follows objects with eyes",
+                                "Holds head up more steadily",
+                                "Might push up during tummy time",
+                                "Begins to coo and make vowel sounds"
+                            ],
+                            tips: [
+                                "Continue feeding on demand (typically 6-8 times daily)",
+                                "Establish a flexible sleep routine",
+                                "Increase tummy time daily",
+                                "Read, sing, and talk to baby regularly",
+                                "Maintain vaccination schedule",
+                                "Monitor weight gain at well-baby visits"
+                            ]
+                        },
+                        mom: {
+                            health: [
+                                "Continue to monitor healing from childbirth",
+                                "Watch for breast issues if breastfeeding (mastitis, clogged ducts)",
+                                "Pay attention to emotional health",
+                                "Resume gentle exercise as approved by doctor"
+                            ],
+                            tips: [
+                                "Continue to prioritize sleep when possible",
+                                "Maintain nutrition and hydration",
+                                "Begin to establish routines",
+                                "Connect with other parents",
+                                "Schedule time for self-care",
+                                "Communicate with partner about needs and adjustments"
+                            ]
+                        }
+                    },
+                    '4-6months': {
+                        baby: {
+                            milestones: [
+                                "Rolls over in one or both directions",
+                                "Begins to sit with support",
+                                "Responds to own name",
+                                "Shows interest in food when others eat",
+                                "Laughs and squeals",
+                                "Explores objects with hands and mouth"
+                            ],
+                            tips: [
+                                "Discuss introducing solid foods with pediatrician",
+                                "Start with iron-fortified cereal or pureed foods",
+                                "Continue breastfeeding or formula as main nutrition",
+                                "Create a consistent sleep routine",
+                                "Provide safe toys that stimulate senses",
+                                "Continue regular well-baby visits"
+                            ]
+                        },
+                        mom: {
+                            health: [
+                                "Postpartum healing should be complete",
+                                "Hormonal changes may continue, affecting mood and energy",
+                                "Evaluate work-life balance if returning to work",
+                                "Consider birth control options if not already addressed"
+                            ],
+                            tips: [
+                                "Establish more consistent routines",
+                                "Continue or begin regular exercise",
+                                "Connect with supportive community",
+                                "Plan quality time with partner",
+                                "Consider meal planning to ensure nutrition",
+                                "Find balance between baby care and personal needs"
+                            ]
+                        }
+                    },
+                    '7-9months': {
+                        baby: {
+                            milestones: [
+                                "Sits without support",
+                                "Crawls or shows pre-crawling movements",
+                                "Responds to simple verbal requests",
+                                "Develops pincer grasp (thumb and finger)",
+                                "May pull to stand",
+                                "Babbles with consonant sounds ('ba', 'da', 'ma')"
+                            ],
+                            tips: [
+                                "Continue introducing new foods and textures",
+                                "Offer soft finger foods to develop self-feeding",
+                                "Childproof your home thoroughly",
+                                "Establish consistent nap and sleep schedule",
+                                "Play interactive games like peek-a-boo",
+                                "Read books daily and name objects/people"
+                            ]
+                        },
+                        mom: {
+                            health: [
+                                "Focus on maintaining strength and fitness",
+                                "Continue monitoring for any signs of depression or anxiety",
+                                "Schedule dental check-up (pregnancy can affect dental health)",
+                                "Consider regular health check-up if not done recently"
+                            ],
+                            tips: [
+                                "Be prepared for increased mobility (baby-proofing)",
+                                "Plan for more active supervision as baby explores",
+                                "Develop strategies for sleep challenges",
+                                "Find childcare options for occasional breaks",
+                                "Connect with other parents of similarly aged babies",
+                                "Practice self-care routines consistently"
+                            ]
+                        }
+                    },
+                    '10-12months': {
+                        baby: {
+                            milestones: [
+                                "May take first steps or cruise along furniture",
+                                "Says 'mama' and 'dada' with meaning",
+                                "Understands simple instructions",
+                                "Plays simple games (wave bye-bye, clap)",
+                                "Points to objects of interest",
+                                "Shows specific preferences for foods and toys"
+                            ],
+                            tips: [
+                                "Transition to more table foods and cup drinking",
+                                "Encourage walking with push toys",
+                                "Begin setting consistent limits and routines",
+                                "Read interactive books with sounds and textures",
+                                "Continue regular well-baby visits",
+                                "Consider weaning process if desired"
+                            ]
+                        },
+                        mom: {
+                            health: [
+                                "Focus on overall wellness",
+                                "Ensure regular preventive healthcare",
+                                "Consider calcium intake, especially if breastfeeding",
+                                "Monitor energy levels and stress management"
+                            ],
+                            tips: [
+                                "Prepare for first birthday celebrations",
+                                "Plan for transitions (weaning, changing sleep patterns)",
+                                "Develop consistent approach to discipline",
+                                "Balance increased mobility with safety",
+                                "Consider joining toddler activity groups",
+                                "Reflect on first year and set goals for coming year"
+                            ]
+                        }
+                    },
+                    'toddler': {
+                        baby: {
+                            milestones: [
+                                "Walking independently",
+                                "Increasing vocabulary (10-50+ words by 18 months)",
+                                "Follows more complex directions",
+                                "Scribbles with crayons",
+                                "Builds towers with blocks",
+                                "Shows increasing independence",
+                                "Engages in pretend play"
+                            ],
+                            tips: [
+                                "Offer balanced meals with various food groups",
+                                "Limit screen time according to pediatrician guidelines",
+                                "Encourage physical activity daily",
+                                "Read together daily to develop language",
+                                "Provide opportunities for social interaction",
+                                "Establish consistent discipline approach",
+                                "Create safe environment for exploration"
+                            ]
+                        },
+                        mom: {
+                            health: [
+                                "Resume regular health screenings",
+                                "Focus on long-term health maintenance",
+                                "Monitor stress levels with increasing toddler independence",
+                                "Consider family planning decisions"
+                            ],
+                            tips: [
+                                "Develop strategies for toddler tantrums",
+                                "Join playgroups for socialization",
+                                "Plan activities that engage both you and toddler",
+                                "Establish clear boundaries and routines",
+                                "Find childcare options for personal time",
+                                "Connect with other parents of toddlers",
+                                "Take time to enjoy this active, curious stage"
+                            ]
+                        }
+                    }
+                };
+
+                const selectedContent = healthContent[age];
+
+                if (!selectedContent) {
+                    return `<p>Information for the selected age is not available.</p>`;
+                }
+
+                return `
+                    <div class="health-card baby">
+                        <div class="health-card-header">Baby Health & Development</div>
+                        <div class="health-card-content">
+                            <h3>Developmental Milestones</h3>
+                            <ul class="milestone-list">
+                                ${selectedContent.baby.milestones.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+
+                            <h3>Care Tips</h3>
+                            <ul class="tip-list">
+                                ${selectedContent.baby.tips.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="health-card mom">
+                        <div class="health-card-header">Mother's Health & Recovery</div>
+                        <div class="health-card-content">
+                            <h3>Health Considerations</h3>
+                            <ul class="milestone-list">
+                                ${selectedContent.mom.health.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+
+                            <h3>Self-Care Tips</h3>
+                            <ul class="tip-list">
+                                ${selectedContent.mom.tips.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="alert">
+                        <div class="alert-title">Important Notice</div>
+                        <p>This information is provided as general guidance only. Always consult with your healthcare provider for personalized medical advice.</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
